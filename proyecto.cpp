@@ -25,9 +25,28 @@ bool sonCambiaformas(const Persona& p1, const Persona& p2) {
     return count >= 3;
 }
 */
+
+void encontrarCambiaformas(Persona personas[], bool esCambiaformas[], int N, int &cantidadCambiaformas, int indice) {
+    if (indice == N) return; //Caso base: se chequearon todas las personas
+
+    if (!esCambiaformas[indice]) {
+        esCambiaformas[indice] = true; //Se marca a la persona como cambiaformas
+
+        for (int i = indice+1 ; i < N; i++) {
+            if (sonCambiaformas(personas[indice], personas[i])) {
+                esCambiaformas[i] = true; //Se marca a la siguiente persona como cambiaformas
+            }
+        }
+        cantidadCambiaformas++;
+    }
+    esCambiaformas[indice] = false; //El Back del Tracking
+    encontrarCambiaformas(personas, esCambiaformas, N, cantidadCambiaformas, indice+1);
+}
+
 int main() {
 
     Persona personas[1000];
-    bool esCambiaformas[1000] = {false};
+    bool esCambiaformas[1000] = {false}; //Arreglo para identificar a los cambiaformas
+    int cantidadCambiaformas = 0; 
     return 0;
 }
