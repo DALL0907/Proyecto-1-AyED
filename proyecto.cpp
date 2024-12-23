@@ -14,17 +14,21 @@ struct Persona
     float distanciaNarizFrente; //Distancia entre la nariz y la frente - Medida (1 ≤ A ≤ 4).
     float distanciaNarizLabio; //Distancia entre la nariz y el labrio superior - Medida (0.1 ≤ A ≤ 0.5).
 };
-/* Copilot hizo esto
-bool sonCambiaformas(const Persona& p1, const Persona& p2) {
-    int count = 0;
-    if (fabs(p1.profundidadOjos - p2.profundidadOjos) <= 0.05) count++;
-    if (fabs(p1.distanciaOjos - p2.distanciaOjos) <= 0.05) count++;
-    if (fabs(p1.distanciaNarizFrente - p2.distanciaNarizFrente) <= 0.05) count++;
-    if (fabs(p1.distanciaNarizLabio - p2.distanciaNarizLabio) <= 0.05) count++;
-    if (fabs(p1.altura - p2.altura) <= 1.0) count++;
-    return count >= 3;
+//Copilot hizo esto
+bool sonCambiaformas(Persona p1, Persona p2) {
+    int caracteristicas = 0;
+    if (fabs(p1.profundidadOjos - p2.profundidadOjos) <= 0.05) caracteristicas++;
+    if (fabs(p1.distanciaOjos - p2.distanciaOjos) <= 0.05) caracteristicas++;
+    if (fabs(p1.distanciaNarizFrente - p2.distanciaNarizFrente) <= 0.05) caracteristicas++;
+    if (fabs(p1.distanciaNarizLabio - p2.distanciaNarizLabio) <= 0.05) caracteristicas++;
+    if (fabs(p1.altura - p2.altura) <= 1.0) caracteristicas++;
+    return caracteristicas >= 3;
 }
-*/
+
+bool confirmarSospechas(Persona p1) {
+    if (p1.capacidadMagica) return false;
+    if (p1.especie == "Kripsan") return false;
+}
 
 void encontrarCambiaformas(Persona personas[], bool esCambiaformas[], int N, int &cantidadCambiaformas, int indice) {
     if (indice == N) return; //Caso base: se chequearon todas las personas
@@ -39,7 +43,6 @@ void encontrarCambiaformas(Persona personas[], bool esCambiaformas[], int N, int
         }
         cantidadCambiaformas++;
     }
-    esCambiaformas[indice] = false; //El Back del Tracking
     encontrarCambiaformas(personas, esCambiaformas, N, cantidadCambiaformas, indice+1);
 }
 
