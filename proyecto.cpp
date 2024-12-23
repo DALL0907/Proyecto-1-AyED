@@ -41,7 +41,7 @@ void encontrarCambiaformas(Persona personas[], bool esCambiaformas[], int N, int
                 esCambiaformas[i] = true; //Se marca a la siguiente persona como cambiaformas
             }
         }
-        cantidadCambiaformas++;
+        cantidadCambiaformas++; //Cambiaformas y sus distintos cuerpos
     }
     encontrarCambiaformas(personas, esCambiaformas, N, cantidadCambiaformas, indice+1);
 }
