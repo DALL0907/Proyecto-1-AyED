@@ -30,20 +30,22 @@ bool confirmarSospechas(Persona p1) {
     if (p1.especie == "Kripsan") return false;
 }
 
-void encontrarCambiaformas(Persona personas[], bool esCambiaformas[], int N, int &cantidadCambiaformas, int indice) {
+void encontrarCambiaformas(Persona personas[], bool esCambiaformas[], int N, int &cantidadCambiaformas, int indice, Persona sospechosos[]) {
     if (indice == N) return; //Caso base: se chequearon todas las personas
 
     if (!esCambiaformas[indice]) {
         esCambiaformas[indice] = true; //Se marca a la persona como cambiaformas
-
+        sospechosos[cantidadCambiaformas] = personas[indice]; //Se agrega a la lista de sospechosos
+        
         for (int i = indice+1 ; i < N; i++) {
             if (sonCambiaformas(personas[indice], personas[i])) {
                 esCambiaformas[i] = true; //Se marca a la siguiente persona como cambiaformas
+                sospechosos[cantidadCambiaformas] = personas[i]; //Se agrega a la lista de sospechosos
             }
         }
         cantidadCambiaformas++; //Cambiaformas y sus distintos cuerpos
     }
-    encontrarCambiaformas(personas, esCambiaformas, N, cantidadCambiaformas, indice+1);
+    encontrarCambiaformas(personas, esCambiaformas, N, cantidadCambiaformas, indice+1, sospechosos);
 }
 
 int main() {
@@ -51,5 +53,6 @@ int main() {
     Persona personas[1000];
     bool esCambiaformas[1000] = {false}; //Arreglo para identificar a los cambiaformas
     int cantidadCambiaformas = 0; 
+    Persona sospechosos[1000];
     return 0;
 }
