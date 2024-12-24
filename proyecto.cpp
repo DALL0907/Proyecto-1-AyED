@@ -25,9 +25,11 @@ bool sonCambiaformas(Persona p1, Persona p2) {
     return caracteristicas >= 3;
 }
 
-bool confirmarSospechas(Persona p1) {
-    if (p1.capacidadMagica) return false;
-    if (p1.especie == "Kripsan") return false;
+bool confirmarSospechas(Persona sospechosos[], int cantidadSospechosos, bool esCambiaformas[], int contador) {
+
+    if (sospechosos[contador].capacidadMagica) return false;
+    if (sospechosos[contador].especie == "Kripsan") return false;
+    
 }
 
 void encontrarCambiaformas(Persona personas[], bool esCambiaformas[], int N, int &cantidadCambiaformas, int indice, Persona sospechosos[]) {
@@ -36,7 +38,7 @@ void encontrarCambiaformas(Persona personas[], bool esCambiaformas[], int N, int
     if (!esCambiaformas[indice]) {
         esCambiaformas[indice] = true; //Se marca a la persona como cambiaformas
         sospechosos[cantidadCambiaformas] = personas[indice]; //Se agrega a la lista de sospechosos
-        
+
         for (int i = indice+1 ; i < N; i++) {
             if (sonCambiaformas(personas[indice], personas[i])) {
                 esCambiaformas[i] = true; //Se marca a la siguiente persona como cambiaformas
