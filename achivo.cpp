@@ -13,7 +13,7 @@ struct Persona
     float profundidadOjos; // Medida (0.1 ≤ A ≤ 0.5).
     float distanciaOjos; //Distancia entre ojos - Medida (0.1 ≤ A ≤ 0.5).
     float distanciaNarizFrente; //Distancia entre la nariz y la frente - Medida (1 ≤ A ≤ 4).
-    float distanciaNarizLabio; //Distancia entre la nariz y el labrio superior - Medida (0.1 ≤ A ≤ 0.5).
+    float distanciaNarizLabio; //Distancia entre la nariz y el labrio superior - Medida (0.1 ≤ A ≤ 0.5)
 };
 
 void leer(Persona personas[]){
