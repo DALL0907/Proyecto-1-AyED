@@ -36,11 +36,13 @@ void encontrarCambiaformas(Persona personas[], bool esCambiaformas[], int N, int
     if (!esCambiaformas[indice] && !personas[indice].capacidadMagica && personas[indice].especie != "Kripsan") {
         esCambiaformas[indice] = true; //Se marca a la persona como cambiaformas
         sospechosos[cantidadIdentidades] = personas[indice]; //Se agrega a la lista de sospechosos
+        personas[indice].indiceCambiaformas = cantidadCambiaformas + 1; //Se le asigna el numero de cambiaforma
 
         for (int i = indice+1 ; i < N; i++) {
             if (sonCambiaformas(personas[indice], personas[i])) {
                 esCambiaformas[i] = true; //Se marca a la siguiente persona como cambiaformas
                 sospechosos[cantidadIdentidades] = personas[i]; //Se agrega a la lista de sospechosos
+                personas[i].indiceCambiaformas = cantidadCambiaformas + 1; //Se le asigna el numero de cambiaforma al siguiente
                 cantidadIdentidades++;
             }
         }
