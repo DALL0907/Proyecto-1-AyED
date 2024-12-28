@@ -26,10 +26,6 @@ bool sonCambiaformas(Persona p1, Persona p2) {
     return caracteristicas >= 3;
 }
 
-bool confirmarSospechas(Persona sospechosos[], int cantidadSospechosos, bool esCambiaformas[], int contador) {
-
-}
-
 void encontrarCambiaformas(Persona personas[], bool esCambiaformas[], int N, int &cantidadCambiaformas,int cantidadIdentidades, int indice, Persona sospechosos[]) {
     if (indice == N) return; //Caso base: se chequearon todas las personas
 
