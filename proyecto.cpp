@@ -23,7 +23,7 @@ bool sonCambiaformas(Persona p1, Persona p2) {
     if (fabs(p1.distanciaNarizFrente - p2.distanciaNarizFrente) <= 0.05) caracteristicas++;
     if (fabs(p1.distanciaNarizLabio - p2.distanciaNarizLabio) <= 0.05) caracteristicas++;
     if (fabs(p1.altura - p2.altura) > 1.0) return false;
-    return caracteristicas >= 3;
+    return (caracteristicas >= 3 && (p1.profundidadOjos < p2.profundidadOjos || p1.profundidadOjos > p2.profundidadOjos));
 }
 
 void encontrarCambiaformas(Persona personas[], bool esCambiaformas[], int N, int &cantidadCambiaformas,int cantidadIdentidades, int indice, Persona sospechosos[]) {
