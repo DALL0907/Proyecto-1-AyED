@@ -13,6 +13,7 @@ struct Persona
     float distanciaOjos; //Distancia entre ojos - Medida (0.1 ≤ A ≤ 0.5).
     float distanciaNarizFrente; //Distancia entre la nariz y la frente - Medida (1 ≤ A ≤ 4).
     float distanciaNarizLabio; //Distancia entre la nariz y el labrio superior - Medida (0.1 ≤ A ≤ 0.5).
+    int indiceCambiaformas; //Indice de la persona que es cambiaformas.
 };
 //Copilot hizo esto
 bool sonCambiaformas(Persona p1, Persona p2) {
@@ -27,28 +28,28 @@ bool sonCambiaformas(Persona p1, Persona p2) {
 
 bool confirmarSospechas(Persona sospechosos[], int cantidadSospechosos, bool esCambiaformas[], int contador) {
 
-    if (sospechosos[contador].capacidadMagica) return false;
-    if (sospechosos[contador].especie == "Kripsan") return false;
-    
 }
 
-void encontrarCambiaformas(Persona personas[], bool esCambiaformas[], int N, int &cantidadCambiaformas, int indice, Persona sospechosos[]) {
+void encontrarCambiaformas(Persona personas[], bool esCambiaformas[], int N, int &cantidadCambiaformas,int cantidadIdentidades, int indice, Persona sospechosos[]) {
     if (indice == N) return; //Caso base: se chequearon todas las personas
 
-    if (!esCambiaformas[indice]) {
+    if (!esCambiaformas[indice] && !personas[indice].capacidadMagica && personas[indice].especie != "Kripsan") {
         esCambiaformas[indice] = true; //Se marca a la persona como cambiaformas
-        sospechosos[cantidadCambiaformas] = personas[indice]; //Se agrega a la lista de sospechosos
+        sospechosos[cantidadIdentidades] = personas[indice]; //Se agrega a la lista de sospechosos
 
         for (int i = indice+1 ; i < N; i++) {
             if (sonCambiaformas(personas[indice], personas[i])) {
                 esCambiaformas[i] = true; //Se marca a la siguiente persona como cambiaformas
-                sospechosos[cantidadCambiaformas] = personas[i]; //Se agrega a la lista de sospechosos
+                sospechosos[cantidadIdentidades] = personas[i]; //Se agrega a la lista de sospechosos
+                cantidadIdentidades++;
             }
         }
         cantidadCambiaformas++; //Cambiaformas y sus distintos cuerpos
     }
-    encontrarCambiaformas(personas, esCambiaformas, N, cantidadCambiaformas, indice+1, sospechosos);
+    encontrarCambiaformas(personas, esCambiaformas, N, cantidadCambiaformas, cantidadIdentidades, indice+1, sospechosos);
 }
+
+
 
 int main() {
 
@@ -56,5 +57,13 @@ int main() {
     bool esCambiaformas[1000] = {false}; //Arreglo para identificar a los cambiaformas
     int cantidadCambiaformas = 0; 
     Persona sospechosos[1000];
+
+    if (cantidadCambiaformas == 0) {
+        cout << "0";
+    }
+    else {
+        cout << cantidadCambiaformas << endl;
+        
+    }
     return 0;
 }
