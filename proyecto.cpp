@@ -19,7 +19,7 @@ struct Persona
 //Copilot hizo esto
 bool sonCambiaformas(Persona p1, Persona p2) {
     int caracteristicas = 0;
-    if (fabs(p1.profundidadOjos - p2.profundidadOjos) <= 0.05) caracteristicas++;
+    //if (fabs(p1.profundidadOjos - p2.profundidadOjos) <= 0.05) caracteristicas++;
     if (fabs(p1.distanciaOjos - p2.distanciaOjos) <= 0.05) caracteristicas++;
     if (fabs(p1.distanciaNarizFrente - p2.distanciaNarizFrente) <= 0.05) caracteristicas++;
     if (fabs(p1.distanciaNarizLabio - p2.distanciaNarizLabio) <= 0.05) caracteristicas++;
