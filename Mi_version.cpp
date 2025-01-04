@@ -17,21 +17,73 @@ struct Persona
     bool esCambiaformas = false;
 };
 
+bool comprobarAltura(Persona sospechosos[], Persona identidades[], int cantidad_identidades){
+
+    float altura_original = sospechosos[0].altura, profundidad_ojos = sospechosos[0].profundidadOjos;
+    int indice;
+
+    for(int i = 1; i < 3; i++){
+        if(sospechosos[i].profundidadOjos < profundidad_ojos){
+            profundidad_ojos = sospechosos[i].profundidadOjos;
+            altura_original = sospechosos[i].altura;
+        }
+    }
+
+    if(sospechosos[0].indiceCambiaformas != 0 || sospechosos[1].indiceCambiaformas != 0 || sospechosos[2].indiceCambiaformas != 0){
+
+        for(int i = 0; i < 3; i++){
+            if(sospechosos[i].indiceCambiaformas != 0){
+                indice = sospechosos[i].indiceCambiaformas;
+                break;
+            }
+        }
+
+        for (int i = 0; i < cantidad_identidades; i++){
+            
+            if(identidades[i].profundidadOjos < profundidad_ojos && identidades[i].indiceCambiaformas == indice){
+                profundidad_ojos = identidades[i].profundidadOjos;
+                altura_original = identidades[i].altura;
+            }
+        }
+    }
+
+    if((fabs(altura_original - sospechosos[0].altura) > 1) || (fabs(altura_original - sospechosos[1].altura) > 1) || (fabs(altura_original - sospechosos[2].altura) > 1)){
+        return false;
+    }
+    return true;
+}
+
 
 //Copilot hizo esto
-bool sonCambiaformas(Persona p1, Persona p2) {
+bool sonCambiaformas(Persona sospechosos[], Persona identidades[], int cantidad_identidades){
     int caracteristicas = 0;
-    if (fabs(p1.profundidadOjos - p2.profundidadOjos) <= 0.05) caracteristicas++;
-    if (fabs(p1.distanciaOjos - p2.distanciaOjos) <= 0.05) caracteristicas++;
-    if (fabs(p1.distanciaNarizFrente - p2.distanciaNarizFrente) <= 0.05) caracteristicas++;
-    if (fabs(p1.distanciaNarizLabio - p2.distanciaNarizLabio) <= 0.05) caracteristicas++;
-    if (fabs(p1.altura - p2.altura) > 1.0 || (p1.profundidadOjos - p2.profundidadOjos == 0)) return false;
+    if((fabs(sospechosos[0].profundidadOjos - sospechosos[1].profundidadOjos) <= 0.05) && (fabs(sospechosos[0].profundidadOjos - sospechosos[2].profundidadOjos) <= 0.05) && (fabs(sospechosos[1].profundidadOjos - sospechosos[2].profundidadOjos) <= 0.05)){
+        caracteristicas++;
+    }
+    if((fabs(sospechosos[0].distanciaOjos - sospechosos[1].distanciaOjos) <= 0.05) && (fabs(sospechosos[0].distanciaOjos - sospechosos[2].distanciaOjos) <= 0.05) && (fabs(sospechosos[1].distanciaOjos - sospechosos[2].distanciaOjos) <= 0.05)){
+        caracteristicas++;
+    }
+    if((fabs(sospechosos[0].distanciaNarizFrente - sospechosos[1].distanciaNarizFrente) <= 0.05) && (fabs(sospechosos[0].distanciaNarizFrente - sospechosos[2].distanciaNarizFrente) <= 0.05) && (fabs(sospechosos[1].distanciaNarizFrente - sospechosos[2].distanciaNarizFrente) <= 0.05)){
+        caracteristicas++;
+    }
+    if((fabs(sospechosos[0].distanciaNarizLabio - sospechosos[1].distanciaNarizLabio) <= 0.05) && (fabs(sospechosos[0].distanciaNarizLabio - sospechosos[2].distanciaNarizLabio) <= 0.05) && (fabs(sospechosos[1].distanciaNarizLabio - sospechosos[2].distanciaNarizLabio) <= 0.05)){
+        caracteristicas++;
+    }
+    if((sospechosos[0].especie == "Kripsan") || (sospechosos[1].especie == "Kripsan") || (sospechosos[2].especie == "Kripsan") || sospechosos[0].capacidadMagica || sospechosos[1].capacidadMagica || sospechosos[3].capacidadMagica){
+        return false;
+    }
+    if((sospechosos[0].profundidadOjos - sospechosos[1].profundidadOjos == 0) || (sospechosos[0].profundidadOjos - sospechosos[2].profundidadOjos == 0) || (sospechosos[1].profundidadOjos - sospechosos[2].profundidadOjos == 0)){
+        return false;
+    }
+    if(!comprobarAltura(sospechosos, identidades, cantidad_identidades)){
+        return false;
+    } 
     return (caracteristicas >= 3);
 }
 
-int encontrar_mayor_indice(Persona identidades[], int n){
+int encontrar_mayor_indice(Persona identidades[], int cantidad_identidades){
     int mayor = 0;
-    for(int i = 0; i < n; i++){
+    for(int i = 0; i < cantidad_identidades; i++){
         if(identidades[i].indiceCambiaformas > mayor){
             mayor = identidades[i].indiceCambiaformas;
         }
@@ -39,14 +91,19 @@ int encontrar_mayor_indice(Persona identidades[], int n){
     return mayor;
 }
 
-void asignar_indices(Persona identidades[],Persona sospechosos[], int n, int &cantidad_cambiaformas){
+void asignar_indices(Persona identidades[],Persona sospechosos[], int &cantidad_identidades){
     int nuevo = 0;
     if(sospechosos[0].indiceCambiaformas == 0 && sospechosos[1].indiceCambiaformas == 0 && sospechosos[2].indiceCambiaformas == 0){
-        nuevo = encontrar_mayor_indice(identidades, n) + 1;
+        nuevo = encontrar_mayor_indice(identidades, cantidad_identidades) + 1;
         sospechosos[0].indiceCambiaformas = nuevo;
         sospechosos[1].indiceCambiaformas = nuevo;
         sospechosos[2].indiceCambiaformas = nuevo;
-        
+        /*
+        1
+        2
+        3
+        4
+        */
     }
     else{
         for(int i = 0; i < 3; i++){
@@ -59,8 +116,8 @@ void asignar_indices(Persona identidades[],Persona sospechosos[], int n, int &ca
         }
 
     }
-    if(cantidad_cambiaformas == 0){
-        cantidad_cambiaformas = 3;
+    if(cantidad_identidades == 0){
+        cantidad_identidades = 3;
         for(int i = 0; i < 3; i++){
             identidades[i] = sospechosos[i];
         }
@@ -69,31 +126,55 @@ void asignar_indices(Persona identidades[],Persona sospechosos[], int n, int &ca
         for(int i = 0; i < 3; i++){
             if(!sospechosos[i].esCambiaformas){
                 sospechosos[i].esCambiaformas = true;
-                identidades[cantidad_cambiaformas] = sospechosos[i];
-                cantidad_cambiaformas += 1;
+                identidades[cantidad_identidades] = sospechosos[i];
+                cantidad_identidades += 1;
             }
         }
     }
 
 }
     
+bool diferentes_personas(Persona sospechosos[]){
+    for(int i = 0; i<2; i++){
+        for(int j = i + 1; i < 3; i++){
+            if((sospechosos[i].nombre == sospechosos[j].nombre) && (sospechosos[i].especie == sospechosos[j].especie) && (sospechosos[i].altura == sospechosos[j].altura) && (sospechosos[i].capacidadMagica == sospechosos[j].capacidadMagica)){
+                if((sospechosos[i].profundidadOjos == sospechosos[j].profundidadOjos) && (sospechosos[i].distanciaOjos == sospechosos[j].distanciaOjos) && (sospechosos[i].distanciaNarizFrente == sospechosos[j].distanciaNarizFrente) && (sospechosos[i].distanciaNarizLabio == sospechosos[j].distanciaNarizLabio)){
+                    if((sospechosos[i].indiceCambiaformas == sospechosos[j].indiceCambiaformas) && (sospechosos[i].esCambiaformas == sospechosos[j].esCambiaformas)){
+                        return false;
+                    }
+                    
+                }
+            }
+        }
+        
+    }
+    return true;
+}
 
 
 
-void encontrarCambiaformas(Persona personas[], Persona sospechosos[], Persona identidades[],int &cantidad_cambiaformas, int n, int indice = 0) {
+
+void encontrarCambiaformas(Persona personas[], Persona sospechosos[], Persona identidades[],int &cantidad_identidades, int n, int indice = 0) {
     if(indice == 3){
-        if(sonCambiaformas(sospechosos[0], sospechosos[1]) && sonCambiaformas(sospechosos[0], sospechosos[2]) && sonCambiaformas(sospechosos[1], sospechosos[2])){
-            asignar_indices(identidades, sospechosos, n, cantidad_cambiaformas);
+        if(diferentes_personas(sospechosos)){
+            if(sonCambiaformas(sospechosos, identidades,  cantidad_identidades)){
+                asignar_indices(identidades, sospechosos, cantidad_identidades);
+            }
         }
         return;
     }
     
+    /*
+    1-1-1
     
+    
+    
+    */
     
     
     for(int i = 0; i < n; i++){
         sospechosos[indice] = personas[i];
-        encontrarCambiaformas(personas, sospechosos, identidades, cantidad_cambiaformas, n, indice + 1);
+        encontrarCambiaformas(personas, sospechosos, identidades, cantidad_identidades, n, indice + 1);
     }
 }
 
