@@ -216,7 +216,7 @@ void encontrarCambiaformas(Persona personas[], Persona sospechosos[], Persona id
 }
 
 void leerBD(int &N, Persona personas[]) {
-    ifstream datos("C:\\Users\\58414\\OneDrive\\Documents\\Proyectos UCV\\Segundo Semestre\\AyED\\Proyecto 1\\Proyecto-1-AyED\\dataBase.in");
+    ifstream datos("dataBase.in");
     if (!datos) {
         cout<<"error";
         return;
