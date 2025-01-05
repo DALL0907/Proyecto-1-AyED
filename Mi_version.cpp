@@ -17,6 +17,26 @@ struct Persona
     bool esCambiaformas = false;
 };
 
+bool mismaPersona(Persona p1, Persona p2){
+    if((p1.nombre == p2.nombre)&&(p1.especie == p2.especie)&&(p1.altura == p2.altura)&&(p1.capacidadMagica == p2.capacidadMagica)){
+            if((p1.profundidadOjos == p2.profundidadOjos)&&(p1.distanciaOjos == p2.distanciaOjos)&&(p1.distanciaNarizFrente == p2.distanciaNarizFrente)&&(p1.distanciaNarizLabio == p2.distanciaNarizLabio)){
+                if((p1.indiceCambiaformas == p2.indiceCambiaformas)&&(p1.esCambiaformas == p2.esCambiaformas)){
+                    return true;
+                }
+            }
+            
+        }
+    return false;
+}
+
+int encontrar_persona(Persona sospechosos[], Persona personas[], int n, int k){
+    for(int i = 0; i<n; i++){
+        if(mismaPersona(sospechosos[k], personas[i])){
+            return i;
+        }
+    }
+}
+
 bool comprobarAltura(Persona sospechosos[], Persona identidades[], int cantidad_identidades){
 
     float altura_original = sospechosos[0].altura, profundidad_ojos = sospechosos[0].profundidadOjos;
@@ -69,7 +89,7 @@ bool sonCambiaformas(Persona sospechosos[], Persona identidades[], int cantidad_
     if((fabs(sospechosos[0].distanciaNarizLabio - sospechosos[1].distanciaNarizLabio) <= 0.05) && (fabs(sospechosos[0].distanciaNarizLabio - sospechosos[2].distanciaNarizLabio) <= 0.05) && (fabs(sospechosos[1].distanciaNarizLabio - sospechosos[2].distanciaNarizLabio) <= 0.05)){
         caracteristicas++;
     }
-    if((sospechosos[0].especie == "Kripsan") || (sospechosos[1].especie == "Kripsan") || (sospechosos[2].especie == "Kripsan") || sospechosos[0].capacidadMagica || sospechosos[1].capacidadMagica || sospechosos[3].capacidadMagica){
+    if((sospechosos[0].especie == "Kripsan") || (sospechosos[1].especie == "Kripsan") || (sospechosos[2].especie == "Kripsan") || sospechosos[0].capacidadMagica || sospechosos[1].capacidadMagica || sospechosos[2].capacidadMagica){
         return false;
     }
     if((sospechosos[0].profundidadOjos - sospechosos[1].profundidadOjos == 0) || (sospechosos[0].profundidadOjos - sospechosos[2].profundidadOjos == 0) || (sospechosos[1].profundidadOjos - sospechosos[2].profundidadOjos == 0)){
@@ -91,13 +111,23 @@ int encontrar_mayor_indice(Persona identidades[], int cantidad_identidades){
     return mayor;
 }
 
-void asignar_indices(Persona identidades[],Persona sospechosos[], int &cantidad_identidades){
-    int nuevo = 0;
+void asignar_indices(Persona identidades[],Persona sospechosos[], Persona personas[], int n, int &cantidad_identidades){
+    
+    int nuevo = 0, posicion_0, posicion_1, posicion_2;
+
+    posicion_0 = encontrar_persona(sospechosos, personas, n, 0);
+    posicion_1 = encontrar_persona(sospechosos, personas, n, 1);
+    posicion_2 = encontrar_persona(sospechosos, personas, n, 2);
+
     if(sospechosos[0].indiceCambiaformas == 0 && sospechosos[1].indiceCambiaformas == 0 && sospechosos[2].indiceCambiaformas == 0){
         nuevo = encontrar_mayor_indice(identidades, cantidad_identidades) + 1;
         sospechosos[0].indiceCambiaformas = nuevo;
         sospechosos[1].indiceCambiaformas = nuevo;
         sospechosos[2].indiceCambiaformas = nuevo;
+
+        personas[posicion_0].indiceCambiaformas = nuevo;
+        personas[posicion_1].indiceCambiaformas = nuevo;
+        personas[posicion_2].indiceCambiaformas = nuevo;
         
     }
     else{
@@ -106,17 +136,29 @@ void asignar_indices(Persona identidades[],Persona sospechosos[], int &cantidad_
                 sospechosos[0].indiceCambiaformas = sospechosos[i].indiceCambiaformas;
                 sospechosos[1].indiceCambiaformas = sospechosos[i].indiceCambiaformas;
                 sospechosos[2].indiceCambiaformas = sospechosos[i].indiceCambiaformas;
+
+                personas[posicion_0].indiceCambiaformas = sospechosos[i].indiceCambiaformas;
+                personas[posicion_1].indiceCambiaformas = sospechosos[i].indiceCambiaformas;
+                personas[posicion_2].indiceCambiaformas = sospechosos[i].indiceCambiaformas;
             }
             
         }
 
     }
+
+    personas[posicion_0].esCambiaformas = true;
+    personas[posicion_1].esCambiaformas = true;
+    personas[posicion_2].esCambiaformas = true;
+
     if(cantidad_identidades == 0){
         cantidad_identidades = 3;
+        
         for(int i = 0; i < 3; i++){
+            sospechosos[i].esCambiaformas = true;
             identidades[i] = sospechosos[i];
         }
     }
+    
     else{
         for(int i = 0; i < 3; i++){
             if(!sospechosos[i].esCambiaformas){
@@ -131,17 +173,21 @@ void asignar_indices(Persona identidades[],Persona sospechosos[], int &cantidad_
     
 bool diferentes_personas(Persona sospechosos[]){
     for(int i = 0; i<2; i++){
-        for(int j = i + 1; i < 3; i++){
-            if((sospechosos[i].nombre == sospechosos[j].nombre) && (sospechosos[i].especie == sospechosos[j].especie) && (sospechosos[i].altura == sospechosos[j].altura) && (sospechosos[i].capacidadMagica == sospechosos[j].capacidadMagica)){
-                if((sospechosos[i].profundidadOjos == sospechosos[j].profundidadOjos) && (sospechosos[i].distanciaOjos == sospechosos[j].distanciaOjos) && (sospechosos[i].distanciaNarizFrente == sospechosos[j].distanciaNarizFrente) && (sospechosos[i].distanciaNarizLabio == sospechosos[j].distanciaNarizLabio)){
-                    if((sospechosos[i].indiceCambiaformas == sospechosos[j].indiceCambiaformas) && (sospechosos[i].esCambiaformas == sospechosos[j].esCambiaformas)){
-                        return false;
-                    }
-                    
-                }
+        for(int j = i + 1; j < 3; j++){
+            if (mismaPersona(sospechosos[i], sospechosos[j]))
+            {
+                return false;
             }
+            
+                    
+                    
+                
+            
         }
         
+    }
+    if(sospechosos[0].esCambiaformas && sospechosos[1].esCambiaformas && sospechosos[2].esCambiaformas){
+        return false;
     }
     return true;
 }
@@ -151,9 +197,13 @@ bool diferentes_personas(Persona sospechosos[]){
 
 void encontrarCambiaformas(Persona personas[], Persona sospechosos[], Persona identidades[],int &cantidad_identidades, int n, int indice = 0) {
     if(indice == 3){
+        
         if(diferentes_personas(sospechosos)){
+            
             if(sonCambiaformas(sospechosos, identidades,  cantidad_identidades)){
-                asignar_indices(identidades, sospechosos, cantidad_identidades);
+                
+                asignar_indices(identidades, sospechosos, personas, n, cantidad_identidades);
+                
             }
         }
         return;
@@ -166,7 +216,7 @@ void encontrarCambiaformas(Persona personas[], Persona sospechosos[], Persona id
 }
 
 void leerBD(int &N, Persona personas[]) {
-    ifstream datos("dataBase.in");
+    ifstream datos("C:\\Users\\58414\\OneDrive\\Documents\\Proyectos UCV\\Segundo Semestre\\AyED\\Proyecto 1\\Proyecto-1-AyED\\dataBase.in");
     if (!datos) {
         cout<<"error";
         return;
@@ -204,12 +254,12 @@ int main() {
         cout << "0";
     }
     else {
-        cout << cantidadCambiaformas << endl;
 
-        for(int i = 0; i < cantidad_identidades; i++){
-        cout<<identidades[i].nombre<<endl;
-    }
-        
+        cout<<cantidad_identidades<<endl;
+        for(int j = 0; j<cantidad_identidades; j++){
+            cout<<identidades[j].nombre<<endl;
+        }
+        cout<<endl;
     }
     return 0;
 }
