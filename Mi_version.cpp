@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cmath>
-
+#include<fstream>
 using namespace std;
 
 struct Persona
@@ -54,7 +54,7 @@ bool comprobarAltura(Persona sospechosos[], Persona identidades[], int cantidad_
 }
 
 
-//Copilot hizo esto
+
 bool sonCambiaformas(Persona sospechosos[], Persona identidades[], int cantidad_identidades){
     int caracteristicas = 0;
     if((fabs(sospechosos[0].profundidadOjos - sospechosos[1].profundidadOjos) <= 0.05) && (fabs(sospechosos[0].profundidadOjos - sospechosos[2].profundidadOjos) <= 0.05) && (fabs(sospechosos[1].profundidadOjos - sospechosos[2].profundidadOjos) <= 0.05)){
@@ -98,12 +98,7 @@ void asignar_indices(Persona identidades[],Persona sospechosos[], int &cantidad_
         sospechosos[0].indiceCambiaformas = nuevo;
         sospechosos[1].indiceCambiaformas = nuevo;
         sospechosos[2].indiceCambiaformas = nuevo;
-        /*
-        1
-        2
-        3
-        4
-        */
+        
     }
     else{
         for(int i = 0; i < 3; i++){
@@ -164,31 +159,56 @@ void encontrarCambiaformas(Persona personas[], Persona sospechosos[], Persona id
         return;
     }
     
-    /*
-    1-1-1
-    
-    
-    
-    */
-    
-    
     for(int i = 0; i < n; i++){
         sospechosos[indice] = personas[i];
         encontrarCambiaformas(personas, sospechosos, identidades, cantidad_identidades, n, indice + 1);
     }
 }
 
+void leerBD(int &N, Persona personas[]) {
+    ifstream datos("dataBase.in");
+    if (!datos) {
+        cout<<"error";
+        return;
+    }
+
+    datos >> N;
+    datos.ignore();
+    for (int i = 0; i < N; i++) {
+        getline(datos, personas[i].nombre);
+        getline(datos, personas[i].especie);
+        datos >> personas[i].altura;
+        string capacidadMagica;
+        datos >> capacidadMagica;
+        personas[i].capacidadMagica = capacidadMagica == "Si";
+        datos >> personas[i].profundidadOjos;
+        datos >> personas[i].distanciaOjos;
+        datos >> personas[i].distanciaNarizFrente;
+        datos >> personas[i].distanciaNarizLabio;
+        datos.ignore(); 
+    }
+    datos.close();
+}
+
+
 int main() {
 
     Persona personas[1000];
-    int cantidadCambiaformas = 0; 
-    Persona sospechosos[1000];
+    Persona identidades[1000];
+    Persona sospechosos[3];
+    int cantidadCambiaformas = 0, cantidad_identidades = 0, n; 
+    leerBD(n, personas);
+    encontrarCambiaformas(personas, sospechosos, identidades, cantidad_identidades, n);
 
-    if (cantidadCambiaformas == 0) {
+    if (cantidad_identidades == 0){
         cout << "0";
     }
     else {
         cout << cantidadCambiaformas << endl;
+
+        for(int i = 0; i < cantidad_identidades; i++){
+        cout<<identidades[i].nombre<<endl;
+    }
         
     }
     return 0;
