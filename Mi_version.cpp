@@ -178,11 +178,6 @@ bool diferentes_personas(Persona sospechosos[]){
             {
                 return false;
             }
-            
-                    
-                    
-                
-            
         }
         
     }
@@ -192,10 +187,22 @@ bool diferentes_personas(Persona sospechosos[]){
     return true;
 }
 
+void ordenarOutput(Persona identidades[], int cantidad_identidades) {
+    for (int i = 0; i < cantidad_identidades; i++) {
+        for (int j = i + 1; j < cantidad_identidades; j++) {
+            if (identidades[i].indiceCambiaformas == identidades[j].indiceCambiaformas) {
+                if (identidades[i].profundidadOjos > identidades[j].profundidadOjos) {
+                    Persona aux = identidades[i];
+                    identidades[i] = identidades[j];
+                    identidades[j] = aux;
+                }
+            }
+        }
+    }
+}
 
 
-
-void encontrarCambiaformas(Persona personas[], Persona sospechosos[], Persona identidades[],int &cantidad_identidades, int n, int indice = 0) {
+void encontrarCambiaformas(Persona personas[], Persona sospechosos[], Persona identidades[],int &cantidad_identidades, int n, int &cantidadCambiaformas, int indice = 0) {
     if(indice == 3){
         
         if(diferentes_personas(sospechosos)){
@@ -203,7 +210,7 @@ void encontrarCambiaformas(Persona personas[], Persona sospechosos[], Persona id
             if(sonCambiaformas(sospechosos, identidades,  cantidad_identidades)){
                 
                 asignar_indices(identidades, sospechosos, personas, n, cantidad_identidades);
-                
+                cantidadCambiaformas++;
             }
         }
         return;
@@ -211,7 +218,7 @@ void encontrarCambiaformas(Persona personas[], Persona sospechosos[], Persona id
     
     for(int i = 0; i < n; i++){
         sospechosos[indice] = personas[i];
-        encontrarCambiaformas(personas, sospechosos, identidades, cantidad_identidades, n, indice + 1);
+        encontrarCambiaformas(personas, sospechosos, identidades, cantidad_identidades, n, cantidadCambiaformas, indice + 1);
     }
 }
 
@@ -248,18 +255,22 @@ int main() {
     Persona sospechosos[3];
     int cantidadCambiaformas = 0, cantidad_identidades = 0, n; 
     leerBD(n, personas);
-    encontrarCambiaformas(personas, sospechosos, identidades, cantidad_identidades, n);
+    encontrarCambiaformas(personas, sospechosos, identidades, cantidad_identidades, n, cantidadCambiaformas);
 
     if (cantidad_identidades == 0){
         cout << "0";
     }
     else {
-
-        cout<<cantidad_identidades<<endl;
+        ordenarOutput(identidades, cantidad_identidades);
+        cout<<cantidadCambiaformas<<endl;
         for(int j = 0; j<cantidad_identidades; j++){
-            cout<<identidades[j].nombre<<endl;
+            cout<<identidades[j].indiceCambiaformas<<" - "<<identidades[j].nombre;
+            if (j == 0 || identidades[j-1].indiceCambiaformas != identidades[j].indiceCambiaformas) {
+                cout << " (O)" <<endl;
+                continue;
+            }
+            cout << endl;
         }
-        cout<<endl;
     }
     return 0;
 }
