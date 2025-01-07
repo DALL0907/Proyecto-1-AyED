@@ -14,7 +14,7 @@ struct Persona
     float distanciaNarizFrente; //Distancia entre la nariz y la frente - Medida (1 ≤ A ≤ 4).
     float distanciaNarizLabio; //Distancia entre la nariz y el labrio superior - Medida (0.1 ≤ A ≤ 0.5).
     int indiceCambiaformas = 0; //Indice de la persona que es cambiaformas.
-    bool esCambiaformas = false;
+    bool esCambiaformas = false; 
 };
 
 bool mismaPersona(Persona p1, Persona p2){
@@ -35,6 +35,7 @@ int encontrar_persona(Persona sospechosos[], Persona personas[], int n, int k){
             return i;
         }
     }
+    return -99;
 }
 
 bool comprobarAltura(Persona sospechosos[], Persona identidades[], int cantidad_identidades){
@@ -111,7 +112,7 @@ int encontrar_mayor_indice(Persona identidades[], int cantidad_identidades){
     return mayor;
 }
 
-void asignar_indices(Persona identidades[],Persona sospechosos[], Persona personas[], int n, int &cantidad_identidades){
+void asignar_indices(Persona identidades[],Persona sospechosos[], Persona personas[], int n, int &cantidad_identidades, int &cantidadCambiaformas){
     
     int nuevo = 0, posicion_0, posicion_1, posicion_2;
 
@@ -128,6 +129,8 @@ void asignar_indices(Persona identidades[],Persona sospechosos[], Persona person
         personas[posicion_0].indiceCambiaformas = nuevo;
         personas[posicion_1].indiceCambiaformas = nuevo;
         personas[posicion_2].indiceCambiaformas = nuevo;
+
+        cantidadCambiaformas++;
         
     }
     else{
@@ -188,9 +191,21 @@ bool diferentes_personas(Persona sospechosos[]){
 }
 
 void ordenarOutput(Persona identidades[], int cantidad_identidades) {
+    
     for (int i = 0; i < cantidad_identidades; i++) {
         for (int j = i + 1; j < cantidad_identidades; j++) {
-            if (identidades[i].indiceCambiaformas == identidades[j].indiceCambiaformas) {
+            if (identidades[i].indiceCambiaformas > identidades[j].indiceCambiaformas) {
+                Persona aux = identidades[i];
+                identidades[i] = identidades[j];
+                identidades[j] = aux;
+            }
+        }
+    }
+    
+    
+    for (int i = 0; i < cantidad_identidades; i++) {
+        for (int j = i + 1; j < cantidad_identidades; j++) {
+            if (identidades[i].indiceCambiaformas == identidades[j].indiceCambiaformas) {   
                 if (identidades[i].profundidadOjos > identidades[j].profundidadOjos) {
                     Persona aux = identidades[i];
                     identidades[i] = identidades[j];
@@ -209,8 +224,9 @@ void encontrarCambiaformas(Persona personas[], Persona sospechosos[], Persona id
             
             if(sonCambiaformas(sospechosos, identidades,  cantidad_identidades)){
                 
-                asignar_indices(identidades, sospechosos, personas, n, cantidad_identidades);
-                cantidadCambiaformas++;
+                asignar_indices(identidades, sospechosos, personas, n, cantidad_identidades, cantidadCambiaformas);
+                
+                
             }
         }
         return;
@@ -274,3 +290,28 @@ int main() {
     }
     return 0;
 }
+
+
+
+/*
+
+
+chris   3    distancia_ojos, distancia_frente, distancia_labio
+
+adrian   4   distancia_ojos, distancia_frente, distancia_labio
+
+diego    3.9    distancia_ojos, distancia_frente, distancia_labio
+
+hcuySG
+
+JSHCUCJ
+
+KHASUHCU
+
+
+aaron (O) 4.1   distancia_ojos, distancia_frente, distancia_labio
+
+Si
+
+
+*/
