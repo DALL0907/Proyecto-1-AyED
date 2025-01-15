@@ -190,18 +190,18 @@ bool diferentes_personas(Persona sospechosos[]){
     return true;
 }
 
-void ordenarOutput(Persona identidades[], int cantidad_identidades) {
-    
-    for (int i = 0; i < cantidad_identidades; i++) {
-        for (int j = i + 1; j < cantidad_identidades; j++) {
-            if (identidades[i].indiceCambiaformas > identidades[j].indiceCambiaformas) {
-                Persona aux = identidades[i];
-                identidades[i] = identidades[j];
-                identidades[j] = aux;
+void ordenarOutput(Persona identidades[], int cantidad_identidades, bool tipo_ordenamiento) {
+    if(tipo_ordenamiento){
+        for (int i = 0; i < cantidad_identidades; i++) {
+            for (int j = i + 1; j < cantidad_identidades; j++) {
+                if (identidades[i].indiceCambiaformas > identidades[j].indiceCambiaformas) {
+                    Persona aux = identidades[i];
+                    identidades[i] = identidades[j];
+                    identidades[j] = aux;
+                }
             }
         }
     }
-    
     
     for (int i = 0; i < cantidad_identidades; i++) {
         for (int j = i + 1; j < cantidad_identidades; j++) {
@@ -214,6 +214,7 @@ void ordenarOutput(Persona identidades[], int cantidad_identidades) {
             }
         }
     }
+    
 }
 
 
@@ -239,7 +240,7 @@ void encontrarCambiaformas(Persona personas[], Persona sospechosos[], Persona id
 }
 
 void leerBD(int &N, Persona personas[]) {
-    ifstream datos("dataBase.in");
+    ifstream datos("C:\\Users\\58414\\OneDrive\\Documents\\Proyectos UCV\\Segundo Semestre\\AyED\\Proyecto 1\\Proyecto-1-AyED\\dataBase.in");
     if (!datos) {
         cout<<"error";
         return;
@@ -271,13 +272,14 @@ int main() {
     Persona sospechosos[3];
     int cantidadCambiaformas = 0, cantidad_identidades = 0, n; 
     leerBD(n, personas);
+    ordenarOutput(personas, n, false);
     encontrarCambiaformas(personas, sospechosos, identidades, cantidad_identidades, n, cantidadCambiaformas);
 
     if (cantidad_identidades == 0){
         cout << "0";
     }
     else {
-        ordenarOutput(identidades, cantidad_identidades);
+        ordenarOutput(identidades, cantidad_identidades, true);
         cout<<cantidadCambiaformas<<endl;
         for(int j = 0; j<cantidad_identidades; j++){
             cout<<identidades[j].indiceCambiaformas<<" - "<<identidades[j].nombre;
