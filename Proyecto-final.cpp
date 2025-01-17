@@ -1,8 +1,8 @@
 #include <iostream>
 #include <cmath>
 #include<fstream>
-#include <ctime>
 using namespace std;
+//C2 - Aaron Contreras - Diego León
 
 struct Persona
 {
@@ -145,9 +145,7 @@ void asignar_indices(Persona identidades[],Persona sospechosos[], Persona person
                 personas[posicion_1].indiceCambiaformas = sospechosos[i].indiceCambiaformas;
                 personas[posicion_2].indiceCambiaformas = sospechosos[i].indiceCambiaformas;
             }
-            
         }
-
     }
 
     personas[posicion_0].esCambiaformas = true;
@@ -281,8 +279,6 @@ void encontrarCambiaformas(Persona personas[], Persona sospechosos[], Persona id
             if(sonCambiaformas(sospechosos, identidades,  cantidad_identidades)){
                 
                 asignar_indices(identidades, sospechosos, personas, n, cantidad_identidades, cantidadCambiaformas);
-                
-                
             }
         }
         return;
@@ -321,7 +317,7 @@ void leerBD(int &N, Persona personas[]) {
 
 
 int main() {
-    clock_t start = clock();
+
     Persona personas[1000];
     Persona identidades[1000];
     Persona sospechosos[3];
@@ -349,8 +345,5 @@ int main() {
             cout << endl;
         }
     }
-    clock_t end = clock(); // Tiempo de finalización
-    double elapsed = double(end - start) / CLOCKS_PER_SEC; // Tiempo de ejecución en segundos
-    cout << "Tiempo de ejecución: " << elapsed << " segundos" << endl;
     return 0;
 }
