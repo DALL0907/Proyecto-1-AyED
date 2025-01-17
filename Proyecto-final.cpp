@@ -103,16 +103,6 @@ bool sonCambiaformas(Persona sospechosos[], Persona identidades[], int cantidad_
     return (caracteristicas >= 3);
 }
 
-int encontrar_mayor_indice(Persona identidades[], int cantidad_identidades){
-    int mayor = 0;
-    for(int i = 0; i < cantidad_identidades; i++){
-        if(identidades[i].indiceCambiaformas > mayor){
-            mayor = identidades[i].indiceCambiaformas;
-        }
-    }
-    return mayor;
-}
-
 void asignar_indices(Persona identidades[],Persona sospechosos[], Persona personas[], int n, int &cantidad_identidades, int &cantidadCambiaformas){
     
     int nuevo = 0, posicion_0, posicion_1, posicion_2;
@@ -122,7 +112,7 @@ void asignar_indices(Persona identidades[],Persona sospechosos[], Persona person
     posicion_2 = encontrar_persona(sospechosos, personas, n, 2);
 
     if(sospechosos[0].indiceCambiaformas == 0 && sospechosos[1].indiceCambiaformas == 0 && sospechosos[2].indiceCambiaformas == 0){
-        nuevo = encontrar_mayor_indice(identidades, cantidad_identidades) + 1;
+        nuevo = cantidadCambiaformas + 1;
         sospechosos[0].indiceCambiaformas = nuevo;
         sospechosos[1].indiceCambiaformas = nuevo;
         sospechosos[2].indiceCambiaformas = nuevo;
@@ -255,19 +245,6 @@ void ordenarOutput(Persona identidades[], int cantidad_identidades) {
             }
         }
     }
-    
-    
-    for (int i = 0; i < cantidad_identidades; i++) {
-        for (int j = i + 1; j < cantidad_identidades; j++) {
-            if (identidades[i].indiceCambiaformas == identidades[j].indiceCambiaformas) {   
-                if (identidades[i].profundidadOjos > identidades[j].profundidadOjos) {
-                    Persona aux = identidades[i];
-                    identidades[i] = identidades[j];
-                    identidades[j] = aux;
-                }
-            }
-        }
-    }
 }
 
 
@@ -324,17 +301,13 @@ int main() {
     int cantidadCambiaformas = 0, cantidad_identidades = 0, n; 
     leerBD(n, personas);
     mergeSort(personas, 0, n-1);
-    for (int i = 0; i < n; i++) {
-        cout << personas[i].nombre << endl;
-    }
     encontrarCambiaformas(personas, sospechosos, identidades, cantidad_identidades, n, cantidadCambiaformas);
 
     if (cantidad_identidades == 0){
         cout << "0";
     }
     else {
-        //ordenarOutput(identidades, cantidad_identidades);
-        mergeSort(identidades, 0, cantidad_identidades-1);
+        ordenarOutput(identidades, cantidad_identidades);
         cout<<cantidadCambiaformas<<endl;
         for(int j = 0; j<cantidad_identidades; j++){
             cout<<identidades[j].indiceCambiaformas<<" - "<<identidades[j].nombre;
